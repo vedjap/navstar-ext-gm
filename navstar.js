@@ -61,6 +61,30 @@ async function GetEventCount(hash){
 		console.log(err);
 	}
 }
+async function FetchObjects(hash, tag){
+	try{
+		console.log(tag);
+		const searchRequest = await axios.post(baseURL + 'tag/search',
+			{
+				hash,
+				tag_ids: [tag.id]
+				entity_types:["tracker"]
+			});
+		console.log(searchRequest.data);
+		if(searchRequest.data.success === true){
+			const trackerResultList = searchRequest.data.result;
+			console.log(trackerResultList);
+
+			return countRequest.data.;
+		}else{
+
+			console.log("Something went wrong at trying to fetch unread events");
+		}
+	}catch(err){
+		console.log(err.response.data);
+		console.log(err);
+	}
+}
 
 
 async function GetData(tracker_id){
@@ -70,5 +94,7 @@ async function GetData(tracker_id){
 export {
 	Auth,
 	GetEventCount,
-	GetTags
+	GetTags,
+	FetchObjects
+
 };

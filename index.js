@@ -1,6 +1,6 @@
 import "dotenv/config";
 import schedule from "node-schedule";
-import {Auth, GetEventCount, GetTags} from "./navstar.js";
+import {Auth, GetEventCount, GetTags, FetchObjects} from "./navstar.js";
 import * as fs from "fs";
 
 
@@ -21,10 +21,11 @@ const task = schedule.scheduleJob('*/15 * * * * *',  async function (fireDate){
 		const auth  = await Auth();
 		if(auth && auth.success===true){
 			// Fetch tag id configured in .env as TAG
-			const tagId = await GetTags(auth.hash);
-			console.log(tagId);
+			const tag = await GetTags(auth.hash);
+			console.log(tag);
 			// Fetch trackers and vehicles attached with said tag object.
-			const [trackers, vehicles];
+			const [trackers, vehicles] = await  FetchObjects(hash, tag);
+
 			// Search for unread notifications since last check
 			//			const count = await (auth.hash, trackers);
 			//if(count && count.length > 0) {
