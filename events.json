@@ -1,0 +1,152 @@
+[
+	{
+		"code": "0",
+		"type": "event",
+		"entity": "poweron",
+		"description": "Encendido de motor"
+	},
+	{
+		"code": "1",
+		"type": "event",
+		"entity": "poweroff",
+		"description": "Apagado de motor"
+	},
+	{
+		"code": "3",
+		"type": "event",
+		"entity": "poweron",
+		"description": "Posicion motor encendido"
+	},
+	{
+		"code": "4",
+		"type": "event",
+		"entity": "speedup",
+		"description": "Exceso de velocidad"
+	},
+	{
+		"code": "5",
+		"type": "event",
+		"entity": "idle_start",
+		"description": "Ralenti"
+	},
+	{
+		"code": "6",
+		"type": "",
+		"entity": "",
+		"description": "Arrastre"
+	},
+	{
+		"code": "7",
+		"type": "event",
+		"entity": "harsh_driving",
+		"description": "Manejo agresivo"
+	},
+	{
+		"code": "8",
+		"type": "event",
+		"entity": "crash_alarm",
+		"description": "Choque"
+	},
+	{
+		"code": "9",
+		"type": "",
+		"entity": "",
+		"description": "Transito lento"
+	},
+	{
+		"code": "10",
+		"type": "event",
+		"entity": "battery_off",
+		"description": "Desconexion bateria"
+	},
+	{
+		"code": "11",
+		"type": "event",
+		"entity": "battery_on",
+		"description": "Reconexion bateria"
+	},
+	{
+		"code": "12",
+		"type": "",
+		"entity": "",
+		"description": "SIM Removida"
+	},
+	{
+		"code": "13",
+		"type": "",
+		"entity": "",
+		"description": "SIM Reinsertada"
+	},
+	{
+		"code": "14",
+		"type": "event",
+		"entity": "poweroff",
+		"description": "Posicion motor apagado"
+	},
+	{
+		"code": "15",
+		"type": "event",
+		"entity": "sos",
+		"description": "Boton panico"
+	},
+	{
+		"code": "16",
+		"type": "",
+		"entity": "",
+		"description": "Puerta abierta"
+	},
+	{
+		"code": "17",
+		"type": "",
+		"entity": "",
+		"description": "Puerta cerrada"
+	},
+	{
+		"code": "18",
+		"type": "",
+		"entity": "",
+		"description": "Apagado seguro de motor"
+	},
+	{
+		"code": "19",
+		"type": "",
+		"entity": "",
+		"description": "Jamming"
+	},
+	{
+		"code": "20",
+		"type": "",
+		"entity": "",
+		"description": "Temperatura"
+	},
+	{
+		"code": "21",
+		"type": "event",
+		"entity": "fueling",
+		"description": "Carga de combustible"
+	},
+	{
+		"code": "22",
+		"type": "event",
+		"entity": "drain",
+		"description": "Descarga de combustible"
+	},
+	{
+		"code": "23",
+		"type": "event",
+		"entity": "track_end",
+		"description": "Parada"
+	},
+	{
+		"code": "25",
+		"type": "",
+		"entity": "",
+		"description": "Enganche"
+	},
+	{
+		"code": "26",
+		"type": "",
+		"entity": "",
+		"description": "Desenganche"
+	}
+]

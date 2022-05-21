@@ -1,0 +1,24 @@
+{
+	"name": "nav-gm",
+	"version": "1.0.0",
+	"description": "Data transfer program between navstar(navixy) platform and gmtransport SOAP service",
+	"main": "index.js",
+	"scripts": {
+		"start": "sh ./init.sh",
+		"dev": "nodemon index.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "",
+	"license": "ISC",
+	"type": "module",
+	"dependencies": {
+		"axios": "^0.27.2",
+		"date-fns": "^2.28.0",
+		"dotenv": "^16.0.1",
+		"node-schedule": "^2.1.0",
+		"soap": "^0.43.0"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.16"
+	}
+}
