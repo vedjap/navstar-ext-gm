@@ -3,7 +3,12 @@ import {format} from "date-fns";
 
 const baseURL = "http://navstar.com.mx/api-v2/"
 let lastCheck;
-
+/**
+ * Auth function authenticate the client against the navstar api.
+ * This is the first function that triggers and interacts with the api.
+ * It is run every 15 sec.
+ *
+ * */
 async function Auth(){
 	const login = process.env.USERNAME;
 	const password = process.env.PASSWORD;
@@ -25,11 +30,27 @@ async function GetTags(hash){
 			hash,
 			filter: tag
 		});
-		const tagResponse = tagRequest.data.list;
+		const tagResponse = tagRequest.data;
 		if(tagResponse && tagResponse.success === true){
 			//console.log(tagResponse);
 			//console.log();
-			return tagResponse.find(x=> x.name === tag);;
+			return tagResponse.list.find(x=> x.name === tag);
+		}
+	}catch (err){
+		console.log(err);
+	}
+}
+
+async function GetTrackers(hash){
+	try{
+		const trackerRequest = await axios.post(baseURL+"tracker/list",{
+			hash,
+		});
+		const trackerResponse = trackerRequest.data;
+		if(trackerResponse && trackerResponse.success === true){
+			//console.log(tagResponse);
+			//console.log();
+			return trackerResponse.list;
 		}
 	}catch (err){
 		console.log(err);
@@ -57,31 +78,25 @@ async function GetEventCount(hash){
 			console.log("Something went wrong at trying to fetch unread events");
 		}
 	}catch(err){
-		console.log(err.response.data);
 		console.log(err);
 	}
 }
 async function FetchObjects(hash, tag){
 	try{
-		console.log(tag);
-		const searchRequest = await axios.post(baseURL + 'tag/search',
-			{
-				hash,
-				tag_ids: [tag.id]
-				entity_types:["tracker"]
+		const trackers = await GetTrackers(hash);
+		if(trackers && trackers.length > 0 ){
+			const trackerResultList = trackers.filter(t=>{
+				if(t.tag_bindings.find(b=> b.tag_id === tag.id)){
+					return true;
+				}
+				return false;
 			});
-		console.log(searchRequest.data);
-		if(searchRequest.data.success === true){
-			const trackerResultList = searchRequest.data.result;
-			console.log(trackerResultList);
-
-			return countRequest.data.;
+			return [trackerResultList, vehicleResultList];
 		}else{
 
 			console.log("Something went wrong at trying to fetch unread events");
 		}
 	}catch(err){
-		console.log(err.response.data);
 		console.log(err);
 	}
 }

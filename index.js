@@ -24,10 +24,10 @@ const task = schedule.scheduleJob('*/15 * * * * *',  async function (fireDate){
 			const tag = await GetTags(auth.hash);
 			console.log(tag);
 			// Fetch trackers and vehicles attached with said tag object.
-			const [trackers, vehicles] = await  FetchObjects(hash, tag);
+			const [trackers, vehicles] = await FetchObjects(auth.hash, tag);
 
 			// Search for unread notifications since last check
-			//			const count = await (auth.hash, trackers);
+			//const count = await (auth.hash, trackers);
 			//if(count && count.length > 0) {
 			//	console.log(count);
 			//
