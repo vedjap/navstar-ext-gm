@@ -37,10 +37,13 @@ const task = schedule.scheduleJob('*/15 * * * * *',  async function (fireDate){
 				if(newEvents && newEvents.length > 0) {
 					let enabledEvents = eventConfiguration.filter(e=> e.type.length > 0);
 					//console.log(enabledEvents);
+					let attemptedEventCounter = 0;
+					let updatedEventCounter = 0;
 					enabledEvents.map(async function (evt)  {
 						let filteredEvents = newEvents.filter(ne=> ne.event === evt.entity);
 						//console.log(filteredEvents);
 						filteredEvents.map(async function (fe) {
+							attemptedEventCounter ++;
 							let tracker = trackers.find(t=> t.id === fe.tracker_id);
 							//console.log(tracker);
 							let vehicle = vehicles.find(v=> v.tracker_id === tracker.id);
@@ -49,14 +52,17 @@ const task = schedule.scheduleJob('*/15 * * * * *',  async function (fireDate){
 							console.log(eventData);
 							if(eventData != null){
 								let soapResponse = await SendData(eventData);
-								console.log(soapResponse);
+								if(soapResponse === true){
+									updatedEventCounter ++;
+									console.log(soapResponse);
+								}
 							}
 
 
 
 						});
 					});
-					console.log(`#${enabledEvents.length}- have been synced`);
+					console.log(`#${updatedEventCounter}/${attemptedEventCounter}- have been synced`);
 				}else{
 					console.log("There's no events to sync...");
 				}

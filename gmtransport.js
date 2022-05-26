@@ -13,11 +13,15 @@ async function GetVersion(){
 }
 
 async function SendData(eventData){
-	const client = await soap.createClientAsync(wsdlURL);
-	const response = await client.UbicacionEquipoTercerosAsync(eventData);
-	console.log(response);
-	return response;
+	try{
+		const client = await soap.createClientAsync(wsdlURL);
+		const response = await client.UbicacionEquipoTercerosAsync(eventData);
+		console.log(response);
+		return response[0].UbicacionEquipoTercerosResult;
+	}catch(err){
+		console.error(err)
 
+	}
 }
 
 export {

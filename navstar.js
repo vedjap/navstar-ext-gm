@@ -229,15 +229,16 @@ async function GetFuel(hash, tracker, vehicle){
 					i.name === "can_fuel_1" ||
 					i.name === "can_fuel_2" ||
 					i.name === "can_fuel_litres" ||
-					i.name === "obd_fuel") && i.value != undefined)){
+					i.name === "obd_fuel") && i.value !== undefined)){
 				value = inputs.find(i=>
 					(i.name === "fuel_level" ||
 						i.name === "can_fuel" ||
 						i.name === "can_fuel_1" ||
 						i.name === "can_fuel_2" ||
 						i.name === "can_fuel_litres" ||
-						i.name ==="obd_fuel") && i.value != undefined);
-				return readFuelPercentage(value, vehicle);
+						i.name ==="obd_fuel") && i.value !== undefined);
+				console.log(value);
+				result = readFuelPercentage(value, vehicle);
 			}
 			if(result === undefined){
 				console.log("Fuel data not found on: "+ tracker.id);
