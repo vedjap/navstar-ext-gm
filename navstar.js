@@ -249,7 +249,7 @@ async function GetData(hash, event, history, tracker, vehicle){
 		let lastGPS = await GetLastGPS(hash,tracker);
 		let tempData= await GetTemp(hash,tracker);
 		let odometer = await GetOdometer(hash, tracker);
-		let fuel = await GetFuel(hash, tracker);
+		let fuel = await GetFuel(hash, tracker, vehicle);
 		result.sNoSerie = vehicle.vin !== undefined && vehicle.vin.length > 0 ? vehicle.vin : tracker.source.device_id;
 		result.sEvento = event.code;
 		result.sFechaHoraPaquete = GmDate(history.time);
