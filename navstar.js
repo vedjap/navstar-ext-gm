@@ -142,25 +142,18 @@ async function GetTemp(hash, tracker){
 			tracker_id: tracker.id
 		});
 		if(diagnosticsRequest.data && diagnosticsRequest.data.success === true){
-			console.log(diagnosticsRequest.data);
 			let inputs = diagnosticsRequest.data.inputs;
-			//let states = diagnosticsRequest.data.states;
 			let value;
 			if(inputs && inputs.find(i=> i.name === "can_engine_temp")){
 				value = inputs.find(i=> i.name === "can_engine_temp");
-				console.log(inputs.find(i=> i.name === "can_engine_temp"));
 			}else if(inputs.find(i=> i.name === "can_coolant_t")){
 				value = inputs.find(i=> i.name === "can_coolant_t");
-				console.log(inputs.find(i=> i.name === "can_coolant_t"));
 			}else if(inputs && inputs.find(i=> i.name === "obd_coolant_t")){
 				value = inputs.find(i=> i.name === "obd_coolant_t");
-				console.log(inputs.find(i=> i.name === "obd_coolant_t"));
 			}else if(inputs.find(i=> i.name === "obd_intake_air_t")){
 				value = inputs.find(i=> i.name === "obd_intake_air_t");
-				console.log(inputs.find(i=> i.name === "obd_intake_air_t"));
 			}else if(inputs.find(i=> i.name === "can_intake_air_t")){
 				value = inputs.find(i=> i.name === "can_intake_air_t");
-				console.log(inputs.find(i=> i.name === "can_intake_air_t"));
 			}
 			if(value === undefined){
 				console.log("No temp. value could be found for: " + tracker.id);
@@ -218,7 +211,6 @@ async function GetFuel(hash, tracker, vehicle){
 			hash,
 			tracker_id: tracker.id
 		});
-		console.log(fuelRequest.data);
 		if(fuelRequest.data && fuelRequest.data.success === true){
 			let result;
 			let value;
@@ -237,7 +229,6 @@ async function GetFuel(hash, tracker, vehicle){
 						i.name === "can_fuel_2" ||
 						i.name === "can_fuel_litres" ||
 						i.name ==="obd_fuel") && i.value !== undefined);
-				console.log(value);
 				result = readFuelPercentage(value, vehicle);
 			}
 			if(result === undefined){
@@ -259,7 +250,6 @@ async function GetData(hash, event, history, tracker, vehicle){
 		let tempData= await GetTemp(hash,tracker);
 		let odometer = await GetOdometer(hash, tracker);
 		let fuel = await GetFuel(hash, tracker);
-		console.log(lastGPS);
 		result.sNoSerie = vehicle.vin !== undefined && vehicle.vin.length > 0 ? vehicle.vin : tracker.source.device_id;
 		result.sEvento = event.code;
 		result.sFechaHoraPaquete = GmDate(history.time);
