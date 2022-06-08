@@ -1,9 +1,10 @@
 import * as soap from "soap";
-const wsdlURL = "http://gmtransportft.com/GMTGPSINTEGRACIONTERCEROS_WEB/awws/GMTGPSIntegracionTerceros.awws?wsdl";
+const wsdlURL = "https://gmtransportft.com/GMTGPSINTEGRACIONTERCEROS_WEB/awws/GMTGPSIntegracionTerceros.awws?wsdl";
 
 async function GetVersion(){
 	try{
 		const client = await soap.createClientAsync(wsdlURL);
+
 		const response = await client.GetVersionAsync("tgd");
 		return response[0].GetVersionResult;
 	}catch(err){
