@@ -17,7 +17,6 @@ console.log(`Programm starting
 //Load eventConfiguration from events.js
 let data = fs.readFileSync('./events.json', {encoding:'UTF-8'});
 const eventConfiguration = JSON.parse(data);
-let lastCheck;
 const task = schedule.scheduleJob('*/30 * * * * *',  async function (fireDate){
 	//We need to check for errors at funciton level since callback is asyncronous
 	try {
@@ -35,7 +34,7 @@ const task = schedule.scheduleJob('*/30 * * * * *',  async function (fireDate){
 				const [trackers, vehicles] = await FetchObjects(auth.hash, tag);
 				// Search for new events since last check
 				lastCheck = new Date();
-				const newEvents = await NeedsUpdate(auth.hash, trackers, lastCheck);
+				const newEvents = await NeedsUpdate(auth.hash, trackers, fireDate);
 				if(newEvents && newEvents.length > 0) {
 					let enabledEvents = eventConfiguration.filter(e=> e.type.length > 0);
 					//console.log(enabledEvents);

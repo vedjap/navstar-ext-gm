@@ -1,5 +1,5 @@
 import axios from "axios";
-import {format} from "date-fns";
+import {format, subSeconds} from "date-fns";
 
 const baseURL = "http://navstar.com.mx/api-v2/"
 function GmDate(eventTime){
@@ -93,15 +93,15 @@ async function FetchObjects(hash, tag){
 	}
 }
 
-async function NeedsUpdate(hash, trackers, lastCheck){
+async function NeedsUpdate(hash, trackers, fireDate){
 	try{
 		console.log("Last check: " + lastCheck);
 		const historyRequest = await axios.post(baseURL + 'history/tracker/list',
 			{
 				hash,
 				trackers: trackers.map(t=> t.id),
-				from:format(lastCheck, "yyyy-MM-dd hh:mm:ss"),
-				to: format(new Date(), "yyyy-MM-dd hh:mm:ss")
+				from:format(subSeconds(fireDate, 30), "yyyy-MM-dd hh:mm:ss"),
+				to: format(fireDate, "yyyy-MM-dd hh:mm:ss")
 			});
 		console.log(historyRequest.data);
 		if(historyRequest.data.success === true){
@@ -181,6 +181,9 @@ async function GetOdometer(hash, tracker){
 }
 
 function readFuelPercentage(data, vehicle){
+	console.log(`Attempting to read fuel data of ${vehicle.vin}`);
+	console.log(data);
+
 	if(data.units_type === 'percentage'){
 		return data.value;
 	}
@@ -194,7 +197,7 @@ function readFuelPercentage(data, vehicle){
 		//liters
 		return (data.value*100)/vehicle.fuel_tank_volume;
 	}
-	if(data.units_type.contains('gallon')){
+	if(data.units_type !== undefined && data.units_type.contains('gallon')){
 		return ((data.value*3.785411)*100)/vehicle.fuel_tank_volume;
 	}
 	return null;
