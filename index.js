@@ -17,7 +17,8 @@ console.log(`Programm starting
 //Load eventConfiguration from events.js
 let data = fs.readFileSync('./events.json', {encoding:'UTF-8'});
 const eventConfiguration = JSON.parse(data);
-const task = schedule.scheduleJob('*/15 * * * * *',  async function (fireDate){
+let lastCheck;
+const task = schedule.scheduleJob('*/30 * * * * *',  async function (fireDate){
 	//We need to check for errors at funciton level since callback is asyncronous
 	try {
 		console.log(`Expected time: ${fireDate}  Current time: ${new Date()}`);
@@ -33,7 +34,8 @@ const task = schedule.scheduleJob('*/15 * * * * *',  async function (fireDate){
 				// Fetch trackers and vehicles attached with said tag object.
 				const [trackers, vehicles] = await FetchObjects(auth.hash, tag);
 				// Search for new events since last check
-				const newEvents = await NeedsUpdate(auth.hash, trackers);
+				lastCheck = new Date();
+				const newEvents = await NeedsUpdate(auth.hash, trackers, lastCheck);
 				if(newEvents && newEvents.length > 0) {
 					let enabledEvents = eventConfiguration.filter(e=> e.type.length > 0);
 					//console.log(enabledEvents);
@@ -56,13 +58,10 @@ const task = schedule.scheduleJob('*/15 * * * * *',  async function (fireDate){
 									updatedEventCounter ++;
 									console.log(soapResponse);
 								}
+								console.log(`#${updatedEventCounter}/${attemptedEventCounter}- have been synced`);
 							}
-
-
-
 						});
 					});
-					console.log(`#${updatedEventCounter}/${attemptedEventCounter}- have been synced`);
 				}else{
 					console.log("There's no events to sync...");
 				}

@@ -2,7 +2,6 @@ import axios from "axios";
 import {format} from "date-fns";
 
 const baseURL = "http://navstar.com.mx/api-v2/"
-let lastCheck;
 function GmDate(eventTime){
 	let eventDate = new Date(eventTime);
 	let parts =  eventDate.toISOString().replace(/[TZ]/g, " ").split(" ");
@@ -94,11 +93,8 @@ async function FetchObjects(hash, tag){
 	}
 }
 
-async function NeedsUpdate(hash, trackers){
+async function NeedsUpdate(hash, trackers, lastCheck){
 	try{
-		if(lastCheck === undefined){
-			lastCheck = new Date();
-		}
 		console.log("Last check: " + lastCheck);
 		const historyRequest = await axios.post(baseURL + 'history/tracker/list',
 			{
@@ -107,7 +103,6 @@ async function NeedsUpdate(hash, trackers){
 				from:format(lastCheck, "yyyy-MM-dd hh:mm:ss"),
 				to: format(new Date(), "yyyy-MM-dd hh:mm:ss")
 			});
-		lastCheck = new Date();
 		console.log(historyRequest.data);
 		if(historyRequest.data.success === true){
 			//Here we should filter out the events that are not being tracked
