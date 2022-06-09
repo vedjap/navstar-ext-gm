@@ -33,7 +33,6 @@ const task = schedule.scheduleJob('*/30 * * * * *',  async function (fireDate){
 				// Fetch trackers and vehicles attached with said tag object.
 				const [trackers, vehicles] = await FetchObjects(auth.hash, tag);
 				// Search for new events since last check
-				lastCheck = new Date();
 				const newEvents = await NeedsUpdate(auth.hash, trackers, fireDate);
 				if(newEvents && newEvents.length > 0) {
 					let enabledEvents = eventConfiguration.filter(e=> e.type.length > 0);
