@@ -95,7 +95,7 @@ async function FetchObjects(hash, tag){
 
 async function NeedsUpdate(hash, trackers, fireDate){
 	try{
-		console.log("Last check: " + lastCheck);
+		console.log("Last check: " + fireDate);
 		const historyRequest = await axios.post(baseURL + 'history/tracker/list',
 			{
 				hash,
