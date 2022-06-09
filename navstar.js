@@ -184,7 +184,7 @@ function readFuelPercentage(data, vehicle){
 	console.log(`Attempting to read fuel data of ${vehicle.vin}`);
 	console.log(data);
 
-	if(data.units_type === 'percentage'){
+	if(data.units_type === 'percent'){
 		return data.value;
 	}
 	if(data.units === '' && data.max_value === 100 && data.min_value === 0){
@@ -197,7 +197,7 @@ function readFuelPercentage(data, vehicle){
 		//liters
 		return (data.value*100)/vehicle.fuel_tank_volume;
 	}
-	if(data.units_type !== undefined && data.units_type.contains('gallon')){
+	if(data.units_type !== undefined && data.units_type.includes('gallon')){
 		return ((data.value*3.785411)*100)/vehicle.fuel_tank_volume;
 	}
 	return null;
