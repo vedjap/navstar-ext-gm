@@ -52,7 +52,7 @@ const task = schedule.scheduleJob('*/30 * * * * *',  async function (fireDate){
 							//console.log(vehicle);
 							const eventData = await GetData(auth.hash, evt, fe, tracker, vehicle);
 							console.log(eventData);
-							if(eventData != null){
+							if(eventData !== undefined){
 								let soapResponse = await SendData(eventData);
 								if(soapResponse === true){
 									updatedEventCounter ++;
