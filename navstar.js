@@ -122,10 +122,10 @@ async function NeedsUpdate(hash, trackers, fireDate){
 
 async function GetLastGPS(hash, tracker){
 	try{
-		const lastGPSrequest = await axios.post(baseURL+"tracker/get_last_gps_point",{
+		const lastGPSrequest = await postRetry(baseURL+"tracker/get_last_gps_point",{
 			hash,
 			tracker_id: tracker.id
-		});
+		},3);
 		if(lastGPSrequest.data && lastGPSrequest.data.success === true){
 			return lastGPSrequest.data.value;
 		}
@@ -136,10 +136,10 @@ async function GetLastGPS(hash, tracker){
 
 async function GetTemp(hash, tracker){
 	try{
-		const diagnosticsRequest = await axios.post(baseURL+"tracker/get_diagnostics",{
+		const diagnosticsRequest = await postRetry(baseURL+"tracker/get_diagnostics",{
 			hash,
 			tracker_id: tracker.id
-		});
+		},3);
 		if(diagnosticsRequest.data && diagnosticsRequest.data.success === true){
 			let inputs = diagnosticsRequest.data.inputs;
 			let value;
@@ -171,10 +171,10 @@ async function GetTemp(hash, tracker){
 
 async function GetOdometer(hash, tracker){
 	try{
-		const counterRequest = await axios.post(baseURL+"tracker/get_counters",{
+		const counterRequest = await postRetry(baseURL+"tracker/get_counters",{
 			hash,
 			tracker_id: tracker.id
-		});
+		},3);
 		if(counterRequest.data && counterRequest.data.success === true){
 			let res = counterRequest.data.list.find(e=> e.type === "odometer");
 			return res != undefined ? res.value : (null && console.log(`Odometer could not be found for: ${tracker.id}`));
@@ -209,10 +209,10 @@ function readFuelPercentage(data, vehicle){
 
 async function GetFuel(hash, tracker, vehicle){
 	try{
-		const fuelRequest = await axios.post(baseURL+"tracker/get_fuel",{
+		const fuelRequest = await postRetry(baseURL+"tracker/get_fuel",{
 			hash,
 			tracker_id: tracker.id
-		});
+		},3);
 		if(fuelRequest.data && fuelRequest.data.success === true){
 			let result;
 			let value;
