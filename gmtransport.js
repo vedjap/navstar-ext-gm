@@ -1,6 +1,14 @@
 import * as soap from "soap";
 const wsdlURL = "https://gmtransportft.com/GMTGPSINTEGRACIONTERCEROS_WEB/awws/GMTGPSIntegracionTerceros.awws?wsdl";
 
+const dbRetry = async (client, data) => {
+	try {
+		return await client.UbicacionEquipoTercerosAsync(data);
+	} catch(err) {
+		if (n === 1) throw err;
+		return await dbRetry(url, data, n-1);
+	}
+}
 async function GetVersion(){
 	try{
 		const client = await soap.createClientAsync(wsdlURL);
@@ -16,7 +24,7 @@ async function GetVersion(){
 async function SendData(eventData){
 	try{
 		const client = await soap.createClientAsync(wsdlURL);
-		const response = await client.UbicacionEquipoTercerosAsync(eventData);
+		const response = await dbRetry(client, eventData);
 		console.log(response);
 		return response[0].UbicacionEquipoTercerosResult;
 	}catch(err){

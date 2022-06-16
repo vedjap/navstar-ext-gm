@@ -1,5 +1,6 @@
 import axios from "axios";
 import {format, subSeconds} from "date-fns";
+import {postRetry} from "./utils.js";
 
 const baseURL = "http://navstar.com.mx/api-v2/"
 function GmDate(eventTime){
@@ -7,6 +8,7 @@ function GmDate(eventTime){
 	let parts =  eventDate.toISOString().replace(/[TZ]/g, " ").split(" ");
 	return  parts[0].replace(/-/g, "")+ parts[1].replace(/:/g, "").substring(0, 6);
 }
+
 /**
  * Auth function authenticate the client against the navstar api.
  * This is the first function that triggers and interacts with the api.
@@ -17,9 +19,9 @@ async function Auth(){
 	const login = process.env.USERNAME;
 	const password = process.env.PASSWORD;
 
-	const authRequest = await axios.post(baseURL+"user/auth",{
+	const authRequest = await postRetry(baseURL+"user/auth",{
 		login, password
-	});
+	}, 3);
 	return authRequest.data;
 }
 
@@ -27,10 +29,10 @@ async function GetTags(hash){
 	try{
 		const tag = process.env.TAG;
 
-		const tagRequest = await axios.post(baseURL+"tag/list",{
+		const tagRequest = await postRetry(baseURL+"tag/list",{
 			hash,
 			filter: tag
-		});
+		}, 3);
 		const tagResponse = tagRequest.data;
 		if(tagResponse && tagResponse.success === true){
 			return tagResponse.list.find(x=> x.name === tag);
@@ -42,9 +44,9 @@ async function GetTags(hash){
 
 async function GetTrackers(hash){
 	try{
-		const trackerRequest = await axios.post(baseURL+"tracker/list",{
+		const trackerRequest = await postRetry(baseURL+"tracker/list",{
 			hash,
-		});
+		}, 3);
 		const trackerResponse = trackerRequest.data;
 		if(trackerResponse && trackerResponse.success === true){
 			//console.log();
@@ -57,9 +59,9 @@ async function GetTrackers(hash){
 
 async function GetVehicles (hash, trackers){
 	try{
-		const vehicleRequest = await axios.post(baseURL+"vehicle/list",{
+		const vehicleRequest = await postRetry(baseURL+"vehicle/list",{
 			hash,
-		});
+		}, 3);
 		const vehicleResponse = vehicleRequest.data;
 		if(vehicleResponse && vehicleResponse.success === true){
 			const vehicles = trackers.map(t=>vehicleResponse.list.find(v=> v.tracker_id === t.id));
@@ -88,21 +90,23 @@ async function FetchObjects(hash, tag){
 
 			console.log("Something went wrong at trying to fetch trackers");
 		}
+		return [undefined, undefined];
 	}catch(err){
 		console.log(err);
+		return [undefined, undefined];
 	}
 }
 
 async function NeedsUpdate(hash, trackers, fireDate){
 	try{
 		console.log("Last check: " + fireDate);
-		const historyRequest = await axios.post(baseURL + 'history/tracker/list',
+		const historyRequest = await postRetry(baseURL + 'history/tracker/list',
 			{
 				hash,
 				trackers: trackers.map(t=> t.id),
-				from:format(subSeconds(fireDate, 30), "yyyy-MM-dd hh:mm:ss"),
-				to: format(fireDate, "yyyy-MM-dd hh:mm:ss")
-			});
+				from:format(subSeconds(fireDate, 30), "yyyy-MM-dd HH:mm:ss"),
+				to: format(fireDate, "yyyy-MM-dd HH:mm:ss")
+			}, 3);
 		console.log(historyRequest.data);
 		if(historyRequest.data.success === true){
 			//Here we should filter out the events that are not being tracked
