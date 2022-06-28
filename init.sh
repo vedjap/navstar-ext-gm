@@ -22,4 +22,4 @@ pm2 install pm2-logrotate
 pm2 set pm2-logrotate:max_size 100M
 pm2 set pm2-logrotate:compress true
 
-pm2 start index.js
+NODE_PORT=3002 pm2 start index.js --time --name "goldenwest"
